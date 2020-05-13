@@ -82,6 +82,8 @@ class DinoGame:
                         if not self.is_alive:
                             self.reset()
                         self.start_running()
+                    else:
+                        self._player.jump()
 
                 elif event.key == pygame.K_DOWN:
                     pass
