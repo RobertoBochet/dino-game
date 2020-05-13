@@ -1,1 +1,1 @@
-from .game.game import DinoGame
+from .game import DinoGame
