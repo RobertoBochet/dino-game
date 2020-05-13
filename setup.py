@@ -1,18 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-from os import path
-
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+with open('README.md') as f:
+    _LONG_DESCRIPTION = f.read()
 
 setup(
     name='dino-game',
-    packages=['dinogame'],
-    version='0.1a1',
+    packages=find_packages(),
+    version='0.1a2',
     license='gpl-3.0',
     description='A Python reimplementation of the famous dino game, thought for autonomous control',
-    long_description=long_description,
+    long_description=_LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     author='Roberto Bochet',
     author_email='robertobochet@gmail.com',
