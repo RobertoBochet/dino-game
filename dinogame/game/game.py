@@ -2,7 +2,7 @@ import time
 
 import pygame
 
-from .entities import Decorations, Ground, Player
+from .entities import Decorations, Ground, Player, Obstacles
 from ..callback import Callback
 from ..tictoc import TicToc
 
@@ -34,6 +34,7 @@ class DinoGame:
 
         self._ground = None
         self._decorations = None
+        self._obstacles = None
         self._player = None
         self._entities = None
 
@@ -47,6 +48,7 @@ class DinoGame:
 
         self._ground = Ground(self.GROUND_POSITION)
         self._decorations = Decorations(self.WIDTH, (10, self.GROUND_POSITION - 20), 0.005)
+        self._obstacles = Obstacles(self.WIDTH)
 
         self._player = Player((20, self.GROUND_POSITION + 10))
         self._entities = pygame.sprite.Group(self._player)
@@ -70,7 +72,7 @@ class DinoGame:
 
         self._draw()
 
-        # print("load {}".format(self._tt.toc() * self._fps))
+        print("load {}".format(self._tt.toc() * self._fps))
 
     def _handle_events(self):
         for event in pygame.event.get():
@@ -97,10 +99,11 @@ class DinoGame:
         if self.is_alive and self.is_running:
             self._ground.update(5)
             self._decorations.update()
+            self._obstacles.update(5)
             self._player.update()
 
     def _check_collision(self):
-        if self.score > 500:
+        if len(pygame.sprite.spritecollide(self._player, self._obstacles, False, pygame.sprite.collide_mask)):
             self._starting_time = self.time_alive
 
             self.is_alive = False
@@ -115,6 +118,7 @@ class DinoGame:
 
         self._ground.draw(self._screen)
         self._decorations.draw(self._screen)
+        self._obstacles.draw(self._screen)
         self._entities.draw(self._screen)
 
         self._screen.blit(self._font.render("SCORE {0:08d}".format(self.score), True, (0, 0, 0)), (470, 10))
