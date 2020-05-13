@@ -1,3 +1,4 @@
+import math
 import os
 from enum import Enum
 from typing import Tuple
@@ -47,6 +48,8 @@ class Player(pygame.sprite.Sprite):
         self._still_x = position[0]
         self._still_y = position[1]
         self._ddy = 0
+
+        self._animation_count = 0
 
         self._try_to = Player.State.STILL
         self._state = Player.State.STILL
@@ -119,3 +122,12 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.bottom = y
             self.rect.left = self._still_x
+
+        # run animation
+        self._animation_count = 0 if self._animation_count >= 9 else self._animation_count + 1
+        frame = math.trunc(self._animation_count / 5)
+        if self._state == Player.State.RUNNING:
+            self.image = self._images["run"][frame]
+
+        elif self._state == Player.State.CROUCHED:
+            self.image = self._images["crouched"][frame]
