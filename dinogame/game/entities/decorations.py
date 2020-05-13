@@ -12,7 +12,7 @@ class Decorations(pygame.sprite.Group):
     def __init__(self,
                  stage_width: float,
                  clouds_vertical_position: Tuple[float, float],
-                 cloud_spawn_rate: float = 0.02):
+                 cloud_spawn_rate: float = 0.005):
         super(Decorations, self).__init__()
 
         self._stage_width = stage_width
@@ -40,8 +40,11 @@ class Cloud(pygame.sprite.Sprite):
 
         self.rect.center = position
 
-    def update(self, dx: float = 0.03):
-        self.rect.x -= dx
+        self._x = self.rect.right
+
+    def update(self, dx: float = 0.3):
+        self._x -= dx
+        self.rect.right = self._x
 
         if self.rect.right < 0:
             self.kill()
