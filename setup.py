@@ -9,9 +9,9 @@ setup(
     author='Roberto Bochet',
     author_email='robertobochet@gmail.com',
     url='https://github.com/RobertoBochet/dino-game',
-    keywords=['game', 'gym', 'dino'],
+    keywords=['game', 'gym', 'dino', 'pygame'],
     install_requires=[
-        'pygame',
+        'pygame>=2.0.0.dev6',
         'numpy'
     ],
     classifiers=[
