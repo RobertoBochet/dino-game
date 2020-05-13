@@ -70,23 +70,28 @@ class DinoGame:
 
         self._draw()
 
-        print("load {}".format(self._tt.toc() * self._fps))
+        # print("load {}".format(self._tt.toc() * self._fps))
 
     def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    if not self.is_running:
-                        if not self.is_alive:
-                            self.reset()
-                        self.start_running()
-                    else:
-                        self._player.jump()
 
-                elif event.key == pygame.K_DOWN:
-                    pass
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                if not self.is_running:
+                    if not self.is_alive:
+                        self.reset()
+                    self.start_running()
+                else:
+                    self._player.jump()
+
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+                if self.is_running and self.is_alive:
+                    self._player.crouch()
+
+            elif event.type == pygame.KEYUP and event.key == pygame.K_DOWN:
+                if self.is_running and self.is_alive:
+                    self._player.stand_up()
 
     def _update_state(self):
         if self.is_alive and self.is_running:
@@ -95,7 +100,7 @@ class DinoGame:
             self._player.update()
 
     def _check_collision(self):
-        if self.score > 50:
+        if self.score > 500:
             self._starting_time = self.time_alive
 
             self.is_alive = False
@@ -119,6 +124,7 @@ class DinoGame:
     def start_running(self) -> None:
         if not self.is_running and self.is_alive:
             self.is_running = True
+            self._player.run()
 
             self._starting_time = time.time()
 

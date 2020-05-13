@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 from typing import Tuple
 
 import pygame
@@ -8,6 +9,13 @@ COLOR_KEY = (0, 0, 0)
 
 
 class Player(pygame.sprite.Sprite):
+    class State(Enum):
+        STILL = 0
+        RUNNING = 1
+        JUMPING = 2
+        CROUCHED = 3
+        DEAD = 4
+
     def __init__(self, position: Tuple[float, float], gravity: float = 1, jump_velocity: float = 14):
         super(Player, self).__init__()
 
@@ -36,23 +44,78 @@ class Player(pygame.sprite.Sprite):
 
         self._gravity = gravity
         self._jump_velocity = jump_velocity
+        self._still_x = position[0]
         self._still_y = position[1]
         self._ddy = 0
 
+        self._try_to = Player.State.STILL
+        self._state = Player.State.STILL
+
+    def run(self):
+        self._try_to = Player.State.RUNNING
+
     def die(self):
-        self.image = self._images["dead"]
+        self._try_to = Player.State.DEAD
 
     def jump(self):
-        if self._ddy == 0:
-            self._ddy = -self._jump_velocity
+        self._try_to = Player.State.JUMPING
 
     def crouch(self):
-        pass
+        self._try_to = Player.State.CROUCHED
+
+    def stand_up(self):
+        self._try_to = Player.State.RUNNING
 
     def update(self):
-        self.rect.bottom += self._ddy
-        self._ddy += self._gravity
+        # fast return to soil
+        if self._state == Player.State.JUMPING and self._try_to == Player.State.CROUCHED:
+            self._ddy = self._jump_velocity
 
-        if self.rect.bottom >= self._still_y:
-            self.rect.bottom = self._still_y
-            self._ddy = 0
+        # start jump
+        if self._state == Player.State.RUNNING and self._try_to == Player.State.JUMPING:
+            self._state = Player.State.JUMPING
+            self._ddy = -self._jump_velocity
+
+        # handle velocity during jump
+        if self._state == Player.State.JUMPING:
+            if self._try_to == Player.State.JUMPING:
+                self._try_to = Player.State.RUNNING
+
+            self.rect.bottom += self._ddy
+            self._ddy += self._gravity
+
+            if self.rect.bottom >= self._still_y and self._ddy > 0:
+                self._state = Player.State.RUNNING
+                self.rect.bottom = self._still_y
+                self._ddy = 0
+
+        # go to crouched state
+        if self._state == Player.State.RUNNING and self._try_to == Player.State.CROUCHED:
+            self._state = Player.State.CROUCHED
+
+            y = self.rect.bottom
+            self.image = self._images["crouched"][0]
+            self.rect = self.image.get_rect()
+            self.rect.bottom = y
+            self.rect.left = self._still_x - 5
+
+        # go to running state
+        if self._state == Player.State.CROUCHED and self._try_to == Player.State.RUNNING or \
+                self._state == Player.State.STILL and self._try_to == Player.State.RUNNING:
+            self._state = Player.State.RUNNING
+
+            y = self.rect.bottom
+            self.image = self._images["run"][0]
+            self.rect = self.image.get_rect()
+            self.rect.bottom = y
+            self.rect.left = self._still_x
+
+        # die
+        if self._try_to == Player.State.DEAD:
+            self._state = Player.State.DEAD
+
+            y = self.rect.bottom
+            self.image = self._images["dead"]
+            self.rect = self.image.get_rect()
+            self.rect.bottom = y
+            self.rect.left = self._still_x
