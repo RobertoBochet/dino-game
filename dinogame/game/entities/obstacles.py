@@ -2,7 +2,6 @@ import logging
 import math
 import os
 import random
-from pprint import pprint
 
 import pygame
 
@@ -60,7 +59,7 @@ class Flyer(Obstacle):
 
         self._animation_count = 0
 
-        _LOGGER.debug("Create a new flyer")
+        _LOGGER.info("Created a new flyer")
 
     def update(self, dx: int = 5):
         super(Flyer, self).update(dx)
@@ -89,7 +88,7 @@ class Cactus(Obstacle):
         self.rect.bottom = Cactus._GROUND_POSITION
         self.rect.left = Cactus._STAGE_WIDTH
 
-        _LOGGER.debug("Create a new cactus with size of {}".format(self.image.get_width()))
+        _LOGGER.info("Created a new cactus with size of {}".format(self.image.get_width()))
 
     @staticmethod
     def create_sprites():
@@ -144,4 +143,4 @@ class Cactus(Obstacle):
             i[1]
         ), Cactus._SPRITES))
 
-        _LOGGER.debug("Generate cactus' sprites")
+        _LOGGER.info("Generate cactus' sprites")

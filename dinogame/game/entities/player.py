@@ -5,11 +5,12 @@ from typing import Tuple
 
 import pygame
 
-PLAYER_FILE = "../../assets/player.png"
-COLOR_KEY = (0, 0, 0)
+_COLOR_KEY = (0, 0, 0)
 
 
 class Player(pygame.sprite.Sprite):
+    _SPRITE_FILE = "../../assets/player.png"
+
     class State(Enum):
         STILL = 0
         RUNNING = 1
@@ -20,9 +21,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, position: Tuple[float, float], gravity: float = 1, jump_velocity: float = 14):
         super(Player, self).__init__()
 
-        sprite = pygame.image.load(os.path.join(os.path.dirname(__file__), PLAYER_FILE))
+        sprite = pygame.image.load(os.path.join(os.path.dirname(__file__), Player._SPRITE_FILE))
 
-        sprite.set_colorkey(COLOR_KEY)
+        sprite.set_colorkey(_COLOR_KEY)
 
         self._images = {
             "still": sprite.subsurface((0, 0, 44, 47)).convert(),

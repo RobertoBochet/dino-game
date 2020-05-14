@@ -3,11 +3,8 @@ import os
 
 import pygame
 
-GROUND_FILE = "../../assets/ground.png"
-COLOR_KEY = (0, 0, 0)
-
-_LOGGER = logging.getLogger(__package__)
-
+_GROUND_FILE = "../../assets/ground.png"
+_COLOR_KEY = (0, 0, 0)
 
 class Ground(pygame.sprite.Group):
     def __init__(self, ground_position: float):
@@ -24,9 +21,9 @@ class GroundPiece(pygame.sprite.Sprite):
     def __init__(self, ground_position: float, piece: int, pieces: int):
         super(GroundPiece, self).__init__()
 
-        sprite = pygame.image.load(os.path.join(os.path.dirname(__file__), GROUND_FILE))
+        sprite = pygame.image.load(os.path.join(os.path.dirname(__file__), _GROUND_FILE))
 
-        sprite.set_colorkey(COLOR_KEY)
+        sprite.set_colorkey(_COLOR_KEY)
 
         w, h = sprite.get_size()
 

@@ -4,8 +4,7 @@ from typing import Tuple
 
 import pygame
 
-CLOUD_FILE = "../../assets/cloud.png"
-COLOR_KEY = (0, 0, 0)
+_COLOR_KEY = (0, 0, 0)
 
 
 class Decorations(pygame.sprite.Group):
@@ -29,12 +28,13 @@ class Decorations(pygame.sprite.Group):
 
 
 class Cloud(pygame.sprite.Sprite):
+    _SPRITE_FILE = "../../assets/cloud.png"
     def __init__(self, position: Tuple[float, float]):
         super(Cloud, self).__init__()
 
-        self.image = pygame.image.load(os.path.join(os.path.dirname(__file__), CLOUD_FILE)).convert()
+        self.image = pygame.image.load(os.path.join(os.path.dirname(__file__), Cloud._SPRITE_FILE)).convert()
 
-        self.image.set_colorkey(COLOR_KEY)
+        self.image.set_colorkey(_COLOR_KEY)
 
         self.rect = self.image.get_rect()
 
