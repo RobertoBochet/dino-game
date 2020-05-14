@@ -3,6 +3,7 @@ import math
 import random
 import time
 
+import numpy as np
 import pygame
 
 from .entities import Decorations, Ground, Player, Obstacles, Flyer, Cactus
@@ -34,7 +35,9 @@ class DinoGame:
     gameover_callback = Callback()
 
     def __init__(self, fps: int = 60):
-        successes, failures = pygame.init()
+        pygame.init()
+
+        pygame.surfarray.use_arraytype("numpy")
 
         self._screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self._clock = pygame.time.Clock()
@@ -179,3 +182,7 @@ class DinoGame:
     def flyer_spawn_probability(self) -> float:
         p = 0.005 - math.exp(-0.02 * (self.time_alive - self._last_flyer_spawn))
         return max(0, min(1, p))
+
+    @property
+    def frame(self) -> np.array:
+        return pygame.surfarray.array3d(self._screen)
