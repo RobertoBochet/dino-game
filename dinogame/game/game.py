@@ -1,10 +1,15 @@
+import logging
+import math
+import random
 import time
 
 import pygame
 
-from .entities import Decorations, Ground, Player, Obstacles
+from .entities import Decorations, Ground, Player, Obstacles, Flyer, Cactus
 from ..callback import Callback
 from ..tictoc import TicToc
+
+_LOGGER = logging.getLogger(__package__)
 
 
 class DinoGame:
@@ -14,6 +19,16 @@ class DinoGame:
 
     is_alive: bool
     is_running: bool
+
+    _starting_time: float
+    _last_cactus_spawn: float
+    _last_flyer_spawn: float
+
+    _ground: Ground
+    _decorations: Decorations
+    _obstacles: Obstacles
+    _player: Player
+    _entities: pygame.sprite.Group
 
     loop_callback = Callback()
     gameover_callback = Callback()
@@ -30,14 +45,6 @@ class DinoGame:
 
         self._tt = TicToc()
 
-        self._starting_time = 0
-
-        self._ground = None
-        self._decorations = None
-        self._obstacles = None
-        self._player = None
-        self._entities = None
-
         self.reset()
 
     def reset(self) -> None:
@@ -45,6 +52,9 @@ class DinoGame:
         self.is_running = False
 
         self._starting_time = 0
+
+        self._last_cactus_spawn = 0
+        self._last_flyer_spawn = 0
 
         self._ground = Ground(self.GROUND_POSITION)
         self._decorations = Decorations(self.WIDTH, (10, self.GROUND_POSITION - 20), 0.005)
@@ -58,7 +68,7 @@ class DinoGame:
             self._loop()
 
     def _loop(self):
-        dt = self._clock.tick(self._fps)
+        self._clock.tick(self._fps)
 
         self._tt.tic()
 
@@ -66,13 +76,14 @@ class DinoGame:
 
         self._handle_events()
 
-        self._update_state()
+        if self.is_alive and self.is_running:
+            self._update_state()
 
-        self._check_collision()
+            self._check_collision()
 
         self._draw()
 
-        print("load {}".format(self._tt.toc() * self._fps))
+        _LOGGER.info("load {:0.4f}".format(self._tt.toc() * self._fps))
 
     def _handle_events(self):
         for event in pygame.event.get():
@@ -96,11 +107,18 @@ class DinoGame:
                     self._player.stand_up()
 
     def _update_state(self):
-        if self.is_alive and self.is_running:
-            self._ground.update(5)
-            self._decorations.update()
-            self._obstacles.update(5)
-            self._player.update()
+        if random.random() < self.cactus_spawn_probability:
+            self._obstacles.add(Cactus(self.cactus_max_size))
+            self._last_cactus_spawn = self.time_alive
+
+        if random.random() < self.flyer_spawn_probability:
+            self._obstacles.add(Flyer())
+            self._last_flyer_spawn = self.time_alive
+
+        self._ground.update(self.dx)
+        self._decorations.update()
+        self._obstacles.update(self.dx)
+        self._player.update()
 
     def _check_collision(self):
         if len(pygame.sprite.spritecollide(self._player, self._obstacles, False, pygame.sprite.collide_mask)):
@@ -139,3 +157,25 @@ class DinoGame:
     @property
     def score(self) -> int:
         return int(self.time_alive * 10)
+
+    @property
+    def speed(self) -> float:
+        return 300 + 3 * self.time_alive
+
+    @property
+    def dx(self) -> float:
+        return self.speed / self._fps
+
+    @property
+    def cactus_max_size(self) -> float:
+        return 1 - math.exp(- self.time_alive / 15)
+
+    @property
+    def cactus_spawn_probability(self) -> float:
+        p = 0.05 - math.exp(-0.02 * (self.time_alive - self._last_cactus_spawn))
+        return max(0, min(1, p))
+
+    @property
+    def flyer_spawn_probability(self) -> float:
+        p = 0.005 - math.exp(-0.02 * (self.time_alive - self._last_flyer_spawn))
+        return max(0, min(1, p))

@@ -1,9 +1,12 @@
+import logging
 import os
 
 import pygame
 
 GROUND_FILE = "../../assets/ground.png"
 COLOR_KEY = (0, 0, 0)
+
+_LOGGER = logging.getLogger(__package__)
 
 
 class Ground(pygame.sprite.Group):
@@ -13,7 +16,7 @@ class Ground(pygame.sprite.Group):
         self.add(GroundPiece(ground_position, 0, 2))
         self.add(GroundPiece(ground_position, 1, 2))
 
-    def update(self, dx: float = 5.0):
+    def update(self, dx: int):
         super(Ground, self).update(dx)
 
 
@@ -25,7 +28,7 @@ class GroundPiece(pygame.sprite.Sprite):
 
         sprite.set_colorkey(COLOR_KEY)
 
-        _, _, w, h = sprite.get_rect()
+        w, h = sprite.get_size()
 
         self._dw = w
 
@@ -35,8 +38,8 @@ class GroundPiece(pygame.sprite.Sprite):
         self.rect.top = ground_position
         self.rect.left = piece * w / pieces
 
-    def update(self, dx: float):
-        self.rect.x -= dx
+    def update(self, dx: int):
+        self.rect.x -= int(dx)
 
         if self.rect.right < 0:
             self.rect.left += self._dw
