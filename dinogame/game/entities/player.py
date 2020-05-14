@@ -57,9 +57,6 @@ class Player(pygame.sprite.Sprite):
     def run(self):
         self._try_to = Player.State.RUNNING
 
-    def die(self):
-        self._try_to = Player.State.DEAD
-
     def jump(self):
         self._try_to = Player.State.JUMPING
 
@@ -68,6 +65,15 @@ class Player(pygame.sprite.Sprite):
 
     def stand_up(self):
         self._try_to = Player.State.RUNNING
+
+    def die(self):
+        self._state = Player.State.DEAD
+
+        y = self.rect.bottom
+        self.image = self._images["dead"]
+        self.rect = self.image.get_rect()
+        self.rect.bottom = y
+        self.rect.left = self._still_x
 
     def update(self):
         # fast return to soil
@@ -109,16 +115,6 @@ class Player(pygame.sprite.Sprite):
 
             y = self.rect.bottom
             self.image = self._images["run"][0]
-            self.rect = self.image.get_rect()
-            self.rect.bottom = y
-            self.rect.left = self._still_x
-
-        # die
-        if self._try_to == Player.State.DEAD:
-            self._state = Player.State.DEAD
-
-            y = self.rect.bottom
-            self.image = self._images["dead"]
             self.rect = self.image.get_rect()
             self.rect.bottom = y
             self.rect.left = self._still_x
