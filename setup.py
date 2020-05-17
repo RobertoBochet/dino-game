@@ -1,12 +1,14 @@
 from setuptools import setup, find_packages
 
+from dinogame import __version__
+
 with open('README.md') as f:
     _LONG_DESCRIPTION = f.read()
 
 setup(
     name='dino-game',
     packages=find_packages(),
-    version='0.2',
+    version=__version__,
     license='gpl-3.0',
     description='A Python reimplementation of the famous dino game, thought for autonomous control',
     long_description=_LONG_DESCRIPTION,
