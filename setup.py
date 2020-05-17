@@ -6,7 +6,7 @@ with open('README.md') as f:
 setup(
     name='dino-game',
     packages=find_packages(),
-    version='0.1a2',
+    version='0.2',
     license='gpl-3.0',
     description='A Python reimplementation of the famous dino game, thought for autonomous control',
     long_description=_LONG_DESCRIPTION,
@@ -21,7 +21,7 @@ setup(
     ],
     package_data={'dinogame': ['assets/*.png']},
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
