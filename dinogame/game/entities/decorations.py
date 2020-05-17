@@ -4,6 +4,8 @@ from typing import Tuple
 
 import pygame
 
+from dinogame.game.entities.moving_object import MovingObject
+
 _COLOR_KEY = (0, 0, 0)
 
 
@@ -20,15 +22,16 @@ class Decorations(pygame.sprite.Group):
 
         self._cloud_spawn_rate = cloud_spawn_rate
 
-    def update(self):
+    def update(self, dx: float = 0.7):
         if random.random() < self._cloud_spawn_rate:
             self.add(Cloud((self._stage_width + 20, random.uniform(*self._clouds_y))))
 
-        super(Decorations, self).update()
+        super(Decorations, self).update(dx)
 
 
-class Cloud(pygame.sprite.Sprite):
+class Cloud(MovingObject):
     _SPRITE_FILE = "../../assets/cloud.png"
+
     def __init__(self, position: Tuple[float, float]):
         super(Cloud, self).__init__()
 
@@ -40,11 +43,6 @@ class Cloud(pygame.sprite.Sprite):
 
         self.rect.center = position
 
-        self._x = self.rect.right
 
-    def update(self, dx: float = 0.3):
-        self._x -= dx
-        self.rect.right = self._x
-
-        if self.rect.right < 0:
-            self.kill()
+    def _on_out_of_screen(self):
+        self.kill()

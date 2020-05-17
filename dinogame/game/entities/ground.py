@@ -1,10 +1,12 @@
-import logging
 import os
 
 import pygame
 
+from .moving_object import MovingObject
+
 _GROUND_FILE = "../../assets/ground.png"
 _COLOR_KEY = (0, 0, 0)
+
 
 class Ground(pygame.sprite.Group):
     def __init__(self, ground_position: float):
@@ -13,11 +15,11 @@ class Ground(pygame.sprite.Group):
         self.add(GroundPiece(ground_position, 0, 2))
         self.add(GroundPiece(ground_position, 1, 2))
 
-    def update(self, dx: int):
+    def update(self, dx: float):
         super(Ground, self).update(dx)
 
 
-class GroundPiece(pygame.sprite.Sprite):
+class GroundPiece(MovingObject):
     def __init__(self, ground_position: float, piece: int, pieces: int):
         super(GroundPiece, self).__init__()
 
@@ -27,16 +29,14 @@ class GroundPiece(pygame.sprite.Sprite):
 
         w, h = sprite.get_size()
 
-        self._dw = w
-
         self.image = sprite.subsurface((piece * w / pieces, 0, w / pieces, h)).convert()
+
         self.rect = self.image.get_rect()
 
         self.rect.top = ground_position
         self.rect.left = piece * w / pieces
 
-    def update(self, dx: int):
-        self.rect.x -= int(dx)
+        self._dw = w
 
-        if self.rect.right < 0:
-            self.rect.left += self._dw
+    def _on_out_of_screen(self):
+        self._x += self._dw

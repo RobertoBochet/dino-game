@@ -4,6 +4,9 @@ import os
 import random
 
 import pygame
+from pygame.surface import Surface
+
+from .moving_object import MovingObject
 
 _COLOR_KEY = (0, 0, 0)
 
@@ -15,23 +18,26 @@ class Obstacles(pygame.sprite.Group):
         super(Obstacles, self).__init__()
 
         Cactus._STAGE_WIDTH = stage_width
-        Cactus._GROUND_POSITION = 130
         Flyer._STAGE_WIDTH = stage_width
 
+        Cactus._GROUND_POSITION = 130
         Flyer._VERTICAL_SPAWN = [40, 70, 100]
 
         Cactus.create_sprites()
 
 
-class Obstacle(pygame.sprite.Sprite):
-    _STAGE_WIDTH = 0
-    _GROUND_POSITION = 0
+class Obstacle(MovingObject):
+    _STAGE_WIDTH: int
 
-    def update(self, dx: int = 5):
-        self.rect.right -= dx
+    def _set_sprite(self, sprite: Surface):
+        self.image = sprite
 
-        if self.rect.right < 0:
-            self.kill()
+        self.rect = self.image.get_rect()
+
+        self.rect.left = self._STAGE_WIDTH
+
+    def _on_out_of_screen(self):
+        self.kill()
 
 
 class Flyer(Obstacle):
@@ -51,17 +57,15 @@ class Flyer(Obstacle):
             sprite.subsurface((w / 2, 0, w / 2, h)).convert()
         ]
 
-        self.image = self._images[0]
+        self._set_sprite(self._images[0])
 
-        self.rect = self.image.get_rect()
-
-        self.rect.center = (Flyer._STAGE_WIDTH + 20, random.choice(Flyer._VERTICAL_SPAWN))
+        self.rect.y = random.choice(Flyer._VERTICAL_SPAWN)-h/2
 
         self._animation_count = 0
 
         _LOGGER.info("Created a new flyer")
 
-    def update(self, dx: int = 5):
+    def update(self, dx: float):
         super(Flyer, self).update(dx)
 
         # run animation
@@ -74,6 +78,8 @@ class Cactus(Obstacle):
     _SPRITE_FILE = "../../assets/cactus.png"
     _SPRITES = []
 
+    _GROUND_POSITION: int
+
     def __init__(self, max_size: float):
         super(Cactus, self).__init__()
 
@@ -82,11 +88,9 @@ class Cactus(Obstacle):
         if len(possible_sprites) == 0:
             possible_sprites = [Cactus._SPRITES[0]]
 
-        self.image = random.choice(possible_sprites)[1]
-        self.rect = self.image.get_rect()
+        self._set_sprite(random.choice(possible_sprites)[1])
 
         self.rect.bottom = Cactus._GROUND_POSITION
-        self.rect.left = Cactus._STAGE_WIDTH
 
         _LOGGER.info("Created a new cactus with size of {}".format(self.image.get_width()))
 
