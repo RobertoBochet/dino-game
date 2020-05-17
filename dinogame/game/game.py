@@ -118,9 +118,11 @@ class DinoGame:
             self._obstacles.add(Flyer())
             self._last_flyer_spawn = self.time_alive
 
-        self._ground.update(self.dx)
+        dx = self.dx
+
+        self._ground.update(dx)
         self._decorations.update()
-        self._obstacles.update(self.dx)
+        self._obstacles.update(dx)
         self._player.update()
 
     def _check_collision(self):
@@ -175,12 +177,24 @@ class DinoGame:
 
     @property
     def cactus_spawn_probability(self) -> float:
-        p = 0.05 - math.exp(-0.02 * (self.time_alive - self._last_cactus_spawn))
+        max_speed = 0.10
+        exp_speed = 0.01
+        spawn_reset = 0.2
+        start_delay = -5
+
+        p = max_speed * (1 - math.exp(-exp_speed * (self.time_alive - start_delay))) * (
+                1 - math.exp(-spawn_reset * (self.time_alive - self._last_cactus_spawn)))
         return max(0, min(1, p))
 
     @property
     def flyer_spawn_probability(self) -> float:
-        p = 0.005 - math.exp(-0.02 * (self.time_alive - self._last_flyer_spawn))
+        max_speed = 0.02
+        exp_speed = 0.01
+        spawn_reset = 0.2
+        start_delay = 20
+
+        p = max_speed * (1 - math.exp(-exp_speed * (self.time_alive - start_delay))) * (
+                1 - math.exp(-spawn_reset * (self.time_alive - self._last_flyer_spawn)))
         return max(0, min(1, p))
 
     @property
