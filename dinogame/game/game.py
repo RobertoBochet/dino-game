@@ -3,7 +3,6 @@ import math
 import random
 import time
 
-import numpy as np
 import pygame
 
 from .entities import Decorations, Ground, Player, Obstacles, Flyer, Cactus
@@ -217,5 +216,5 @@ class DinoGame:
         return max(0, min(1, p))
 
     @property
-    def frame(self) -> np.array:
+    def frame(self) -> "numpy.ndarray":
         return pygame.surfarray.array3d(self._screen)
