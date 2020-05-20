@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-from dinogame import __version__
+exec(open("./dinogame/version.py").read())
 
 with open('README.md') as f:
     _LONG_DESCRIPTION = f.read()
@@ -18,8 +18,7 @@ setup(
     url='https://github.com/RobertoBochet/dino-game',
     keywords=['game', 'gym', 'dino', 'pygame'],
     install_requires=[
-        'pygame>=2.0.0.dev6',
-        'numpy'
+        'pygame>=2.0.0.dev6'
     ],
     package_data={'dinogame': ['assets/*.png']},
     classifiers=[
