@@ -161,6 +161,15 @@ class DinoGame:
 
             self._starting_time = time.time()
 
+    def stand_up(self) -> None:
+        self._player.stand_up()
+
+    def jump(self) -> None:
+        self._player.jump()
+
+    def crouch(self) -> None:
+        self._player.crouch()
+
     @property
     def load(self) -> float:
         return self._load
