@@ -4,7 +4,7 @@ from typing import Tuple
 
 import pygame
 
-from dinogame.game.entities.moving_object import MovingObject
+from .moving_object import MovingObject
 
 _COLOR_KEY = (0, 0, 0)
 

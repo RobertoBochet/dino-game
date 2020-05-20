@@ -42,7 +42,7 @@ class DinoGame:
         self._screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self._clock = pygame.time.Clock()
 
-        self._font = pygame.font.SysFont("droidsansmononerdfontmono monospace", 13)
+        self._font = pygame.font.SysFont("DejaVuSansMono, monospace", 13)
 
         self._fps = fps
 
@@ -55,6 +55,8 @@ class DinoGame:
     def reset(self) -> None:
         self.is_alive = True
         self.is_running = False
+
+        self._tt.reset()
 
         self._starting_time = 0
 

@@ -10,6 +10,14 @@ class TicToc:
         self._tic = time.time()
 
     def toc(self):
+        if self._tic == 0:
+            return 0
+
         self._toc = time.time()
         self._dt = self._toc - self._tic
         return self._dt
+
+    def reset(self):
+        self._tic = 0
+        self._toc = 0
+        self._dt = 0
