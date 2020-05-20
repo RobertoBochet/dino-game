@@ -10,7 +10,7 @@ A Python reimplementation of the famous dino game, thought for autonomous contro
 
 ## Installation
 
-You can install it from [pypi](https://pypi.org/)
+You can install it from [pypi](https://pypi.org/project/dino-game/).
 
 ```bash
 pip install dino-game
@@ -26,7 +26,7 @@ To try the game without any automation
 python -m dinogame
 ```
 
-You can use `spacebar` to start running, jump, reset when dino die, and `key_down` to crouch.
+You can use `spacebar` to start running, jump, reset when dino dies, and `key_down` to crouch.
 
 ### Library usage
 
@@ -46,7 +46,7 @@ game.play()
 
 #### Callbacks
 
-The library provides some callbacks to feedback the game
+The library provides some callbacks to feed back the game
 
 - `loop_callback`       is called at each new frame
 - `gameover_callback`   is called when a gameover occurs
@@ -82,8 +82,8 @@ if the_cake_is_ready():
 `DinoGame` exposes the following useful properties:
 
 - `load`        the current load of the application. If it is more than `1` it is a problem.
-- `score`       the current score or that of the last session if the player die.
-- `time_alive`  the life time of the player.
+- `score`       the current score or that of the last session if the player dies.
+- `time_alive`  the lifetime of the player.
 - `frame`       the last game frame as `numpy.ndarray`.
 
 ```python
