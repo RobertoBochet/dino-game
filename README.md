@@ -1,16 +1,16 @@
 # Dino Game
 
-[![PyPI - License](https://img.shields.io/pypi/l/dino-game)](https://pypi.org/project/dino-game/)
+[![GitHub](https://img.shields.io/github/license/RobertoBochet/dino-game)](https://github.com/RobertoBochet/dino-game/)
 [![PyPI](https://img.shields.io/pypi/v/dino-game)](https://pypi.org/project/dino-game/)
 [![PyPI - Status](https://img.shields.io/pypi/status/dino-game)](https://pypi.org/project/dino-game/)
-![GitHub last commit](https://img.shields.io/github/last-commit/robertobochet/dino-game)
+[![GitHub last commit](https://img.shields.io/github/last-commit/robertobochet/dino-game)](https://github.com/RobertoBochet/dino-game/)
 ![gluten free](https://img.shields.io/badge/gluten%20free-100%25-success)
 
 A Python reimplementation of the famous dino game, thought for autonomous control
 
 ## Installation
 
-You can install it from pypi
+You can install it from [pypi](https://pypi.org/)
 
 ```bash
 pip install dino-game
@@ -30,7 +30,7 @@ You can use `spacebar` to start running, jump, reset when dino die, and `key_dow
 
 ### Library usage
 
-This initialize the game
+This initializes the game
 
 ```python
 from dinogame import DinoGame
@@ -44,14 +44,16 @@ To start the game's loop you can use `play` method
 game.play()
 ```
 
-#### Callback
+#### Callbacks
 
-The library provide some callback to feedback the game
+The library provides some callbacks to feedback the game
 
-- `loop_callback` is called each frame
-- `gameover_callback` is called when a gameover occurs
+- `loop_callback`       is called at each new frame
+- `gameover_callback`   is called when a gameover occurs
 
-To subscribe to callback you can use callback's `set` method. To the callbacks are given the current instance of `DinoGame` as argument.
+To subscribe to callback you can use callback's `set` method.
+
+The current instance of `DinoGame` is given to the callback as argument.
 
 ```python
 def lp_cb(game: GameDino):
@@ -60,9 +62,37 @@ def lp_cb(game: GameDino):
 game.loop_callback.set(lp_cb)
 ```
 
+#### Actions
+
+The following actions are provided as methods:
+
+- `jump`            to jump
+- `crouch`          to crouch
+- `stand_up`        to stand up
+- `start_running`   to start to run
+- `reset`           to reset the game
+
+```python
+if the_cake_is_ready():
+    game.jump()
+```
+
+#### Useful properties
+
+`DinoGame` exposes the following useful properties:
+
+- `load`        the current load of the application. If it is more than `1` it is a problem.
+- `score`       the current score or that of the last session if the player die.
+- `time_alive`  the life time of the player.
+- `frame`       the last game frame as `numpy.ndarray`.
+
+```python
+if the_game_is_over():
+    print("My score is {}".format(game.score))
+```
+
 ## Credits
 
 This project is realized with the following python's packages:
 
-- `pygame`
-- `numpy`
+- [`pygame`](https://pypi.org/project/pygame/)
