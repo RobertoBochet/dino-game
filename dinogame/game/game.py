@@ -42,9 +42,11 @@ class DinoGame:
         self._screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self._clock = pygame.time.Clock()
 
-        self._font = pygame.font.SysFont("droidsansmononerdfontmono", 13)
+        self._font = pygame.font.SysFont("droidsansmononerdfontmono monospace", 13)
 
         self._fps = fps
+
+        self._load = 0
 
         self._tt = TicToc()
 
@@ -86,7 +88,9 @@ class DinoGame:
 
         self._draw()
 
-        _LOGGER.info("load {:0.4f}".format(self._tt.toc() * self._fps))
+        self._load = self._tt.toc() * self._fps
+
+        _LOGGER.debug("load {:0.4f}".format(self.load))
 
     def _handle_events(self):
         for event in pygame.event.get():
@@ -154,6 +158,10 @@ class DinoGame:
             self._player.run()
 
             self._starting_time = time.time()
+
+    @property
+    def load(self) -> float:
+        return self._load
 
     @property
     def time_alive(self) -> float:
