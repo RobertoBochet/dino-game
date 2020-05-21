@@ -4,6 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/v/dino-game)](https://pypi.org/project/dino-game/)
 [![PyPI - Status](https://img.shields.io/pypi/status/dino-game)](https://pypi.org/project/dino-game/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/robertobochet/dino-game)](https://github.com/RobertoBochet/dino-game/)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/RobertoBochet/dino-game/Upload Python Package)](https://pypi.org/project/dino-game/)
 ![gluten free](https://img.shields.io/badge/gluten%20free-100%25-success)
 
 A Python reimplementation of the famous dino game, thought for autonomous control
