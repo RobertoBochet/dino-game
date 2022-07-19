@@ -10,6 +10,7 @@ from ..callback import Callback
 from ..tictoc import TicToc
 
 _LOGGER = logging.getLogger(__package__)
+_LOGGER.setLevel(logging.ERROR)
 
 
 class DinoGame:
@@ -52,6 +53,9 @@ class DinoGame:
         self._doLoop = False
 
         self.reset()
+
+    def enable_debugging(self):
+        _LOGGER.setLevel(logging.DEBUG)
 
     def reset(self) -> None:
         self.is_alive = True
