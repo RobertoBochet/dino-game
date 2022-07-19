@@ -42,7 +42,7 @@ game = DinoGame()
 To start the game's loop you can use `play` method
 
 ```python
-game.play()
+game.start()
 ```
 
 #### Callbacks
