@@ -10,6 +10,7 @@ from ..callback import Callback
 from ..tictoc import TicToc
 
 _LOGGER = logging.getLogger(__package__)
+_LOGGER.setLevel(logging.ERROR)
 
 
 class DinoGame:
@@ -49,7 +50,12 @@ class DinoGame:
 
         self._tt = TicToc()
 
+        self._doLoop = False
+
         self.reset()
+
+    def enable_debugging(self):
+        _LOGGER.setLevel(logging.DEBUG)
 
     def reset(self) -> None:
         self.is_alive = True
@@ -70,8 +76,16 @@ class DinoGame:
         self._entities = pygame.sprite.Group(self._player)
 
     def start(self):
-        while True:
+        self._doLoop = True
+        while self._doLoop:
             self._loop()
+        pygame.quit()
+
+    def stop(self):
+        if self._doLoop:
+            self._doLoop = False
+        else:
+            pygame.quit()
 
     def _loop(self):
         self._clock.tick(self._fps)
@@ -96,7 +110,7 @@ class DinoGame:
     def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit()
+                self._doLoop = False
 
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 if not self.is_running:

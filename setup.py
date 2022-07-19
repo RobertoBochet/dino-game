@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from setuptools import setup, find_packages
 
 __version__ = "0.0"

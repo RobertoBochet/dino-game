@@ -39,10 +39,10 @@ from dinogame import DinoGame
 game = DinoGame()
 ```
 
-To start the game's loop you can use `play` method
+To start the game's loop you can use `start` method
 
 ```python
-game.play()
+game.start()
 ```
 
 #### Callbacks
@@ -72,6 +72,7 @@ The following actions are provided as methods:
 - `stand_up`        to stand up
 - `start_running`   to start to run
 - `reset`           to reset the game
+- `stop`            to close the window and free resources
 
 ```python
 if the_cake_is_ready():
