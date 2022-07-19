@@ -39,7 +39,7 @@ from dinogame import DinoGame
 game = DinoGame()
 ```
 
-To start the game's loop you can use `play` method
+To start the game's loop you can use `start` method
 
 ```python
 game.start()
