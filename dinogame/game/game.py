@@ -49,6 +49,8 @@ class DinoGame:
 
         self._tt = TicToc()
 
+        self._doLoop = False
+
         self.reset()
 
     def reset(self) -> None:
@@ -70,8 +72,16 @@ class DinoGame:
         self._entities = pygame.sprite.Group(self._player)
 
     def start(self):
-        while True:
+        self._doLoop = True
+        while self._doLoop:
             self._loop()
+        pygame.quit()
+
+    def stop(self):
+        if self._doLoop:
+            self._doLoop = False
+        else:
+            pygame.quit()
 
     def _loop(self):
         self._clock.tick(self._fps)
@@ -96,7 +106,7 @@ class DinoGame:
     def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit()
+                self._doLoop = False
 
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 if not self.is_running:
